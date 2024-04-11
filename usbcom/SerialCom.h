@@ -1,8 +1,8 @@
 #include <iostream>
 #include <windows.h>
 
-#define Wait_time 2000
-#define bytes_size 7
+#define Wait_time 1000
+#define bytes_size 21
 
 class Serial_port
 {

@@ -30,9 +30,9 @@ int main()
     while (Stm_nucleo.isConnected())
     {
         Stm_nucleo.Read_Serial(inputData, bytes_size);
-        std::cout << inputData << std::endl;
-        std::chrono::milliseconds(500);
-
+        std::string inputValStr(inputData); 
+        std::cout << inputValStr << std::endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 
 

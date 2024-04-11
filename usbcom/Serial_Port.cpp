@@ -22,20 +22,22 @@ Serial_port::Serial_port(char* com)
     else if (errMsg == 0)
     {
         DCB dcb_param = { 0 };
-        if (!(GetCommState(h_com, &dcb_param)))
+        if (!GetCommState(h_com, &dcb_param)) printf("Failed to get the com parameters");
+
+        else
         {
             dcb_param.BaudRate = CBR_9600;
             dcb_param.ByteSize = 8;
             dcb_param.StopBits = ONESTOPBIT;
             dcb_param.Parity = NOPARITY;
             dcb_param.fDtrControl = DTR_CONTROL_ENABLE;
+
             if (!SetCommState(h_com, &dcb_param))
             {
                 std::cout << "Coult not set Serial port parameters " << std::endl;
             }
             else
             {
-                printf("Connected");
                 connected = true;
                 PurgeComm(h_com, PURGE_RXCLEAR | PURGE_TXCLEAR);
                 Sleep(Wait_time);
@@ -46,6 +48,8 @@ Serial_port::Serial_port(char* com)
 
         }
     }
+
+
 }
 
 
