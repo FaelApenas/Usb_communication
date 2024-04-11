@@ -3,17 +3,19 @@
 
 Serial_port::Serial_port(char* com)
 {
-    ret = 0;
+ 
+    err = 0;
     status = { 0 };
     connected = 0;
-
-    h_com = CreateFileA(static_cast<LPCSTR>(com), GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    std::string com_str = com; 
+    
+    handle_com = CreateFileA(static_cast<LPCSTR>(com), GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 
     DWORD errMsg = GetLastError();
     if (errMsg == 2)
     {
-        printf("Error com\n");
+        printf("Com not found\n");
     }
     else if (errMsg == 5)
     {
@@ -22,7 +24,7 @@ Serial_port::Serial_port(char* com)
     else if (errMsg == 0)
     {
         DCB dcb_param = { 0 };
-        if (!GetCommState(h_com, &dcb_param)) printf("Failed to get the com parameters");
+        if (!GetCommState(handle_com, &dcb_param)) printf("Failed to get the com parameters");
 
         else
         {
@@ -32,14 +34,14 @@ Serial_port::Serial_port(char* com)
             dcb_param.Parity = NOPARITY;
             dcb_param.fDtrControl = DTR_CONTROL_ENABLE;
 
-            if (!SetCommState(h_com, &dcb_param))
+            if (!SetCommState(handle_com, &dcb_param))
             {
                 std::cout << "Coult not set Serial port parameters " << std::endl;
             }
             else
             {
                 connected = true;
-                PurgeComm(h_com, PURGE_RXCLEAR | PURGE_TXCLEAR);
+                PurgeComm(handle_com, PURGE_RXCLEAR | PURGE_TXCLEAR);
                 Sleep(Wait_time);
 
 
@@ -59,7 +61,7 @@ Serial_port::~Serial_port()
     if (connected == true)
     {
         connected = false;
-        CloseHandle(h_com);
+        CloseHandle(handle_com);
     }
 
 
@@ -68,18 +70,42 @@ Serial_port::~Serial_port()
 int Serial_port::Read_Serial(char* buffer, unsigned int size)
 {
     DWORD bytesRead;
+    char inc_msg[1]; 
+    std::string complete_msg_inc; 
     unsigned int toread = 0;
 
-    ClearCommError(h_com, &ret, &status);
+    ClearCommError(handle_com, &err, &status);
 
     if (status.cbInQue > 0) toread = size;
     else toread = status.cbInQue;
 
-    if (ReadFile(h_com, buffer, toread, &bytesRead, NULL)) return bytesRead;
+    if (ReadFile(handle_com, buffer, toread, &bytesRead, NULL)) 
+    {
+        if()
+    }
 
     return 0;
 
 }
+
+
+bool Serial_port::Write_Serial(char * buffer,unsigned int size) 
+{
+    DWORD bytesSent; 
+    std::string buffer_str = buffer; 
+    
+    if (!WriteFile(handle_com, buffer, buffer_str.length(), &bytesSent, nullptr))
+    {
+        ClearCommError(handle_com,&err,&status); 
+        return false;
+    }
+    else 
+    {
+        return true; 
+    }
+
+}
+ 
 
 
 bool Serial_port::isConnected() { return connected; }

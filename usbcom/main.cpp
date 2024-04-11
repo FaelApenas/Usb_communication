@@ -9,9 +9,9 @@
 char inputData[bytes_size];
 double inputdbl = 0.0;
 
-
-char comPort[] = "COM5";
+char comPort[] = "\\\\.\\COM16";
 char* port = comPort;
+
 
 
 int main()

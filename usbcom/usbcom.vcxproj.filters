@@ -27,4 +27,7 @@
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="syntax_config.txt" />
+  </ItemGroup>
 </Project>

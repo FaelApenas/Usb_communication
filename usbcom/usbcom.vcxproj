@@ -133,6 +133,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Serial_Port.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="syntax_config.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
