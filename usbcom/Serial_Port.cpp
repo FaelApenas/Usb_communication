@@ -1,7 +1,7 @@
 #include "SerialCom.h"
 
 
-Serial_port::Serial_port(char* com)
+Serial_port::Serial_port(char* com, DWORD baud_rate )
 {
     if (!check_com_format(com)) 
     {
@@ -33,7 +33,7 @@ Serial_port::Serial_port(char* com)
 
         else
         {
-            dcb_param.BaudRate = CBR_9600;
+            dcb_param.BaudRate = baud_rate;
             dcb_param.ByteSize = 8;
             dcb_param.StopBits = ONESTOPBIT;
             dcb_param.Parity = NOPARITY;

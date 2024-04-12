@@ -6,6 +6,8 @@
 #include <thread>
 #include <string>
 
+
+
 char inputData[bytes_size];
 double inputdbl = 0.0;
 
@@ -16,7 +18,7 @@ char content[] = "1";
 
 int main()
 {
-    Serial_port Stm_nucleo(port);
+    Serial_port Stm_nucleo(port,CBR_9600);
 
     if (Stm_nucleo.isConnected())
     {

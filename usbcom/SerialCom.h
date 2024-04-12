@@ -24,7 +24,7 @@ private:
 	char end_delimiter_;
 	
 public:
-	Serial_port(char* com);
+	Serial_port(char* com, DWORD baud_rate);
 	~Serial_port();
 
 	int Read_Serial(char* buffer, unsigned int size);
