@@ -18,6 +18,9 @@
     <ClInclude Include="SerialCom.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
+    <ClInclude Include="comands.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Serial_Port.cpp">
@@ -28,6 +31,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="syntax_config.txt" />
+    <Text Include="syntax_config.txt">
+      <Filter>Arquivos de Origem</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -3,7 +3,12 @@
 
 Serial_port::Serial_port(char* com)
 {
- 
+    if (!check_com_format(com)) 
+    {
+        printf("Com format not available ");
+        return;
+    } 
+    //com = handle_higher_com(com); not implemented
     err = 0;
     status = { 0 };
     connected = 0;
@@ -67,25 +72,31 @@ Serial_port::~Serial_port()
 
 }
 
-int Serial_port::Read_Serial(char* buffer, unsigned int size)
+int Serial_port::Read_Serial(char *buffer, unsigned int size)
 {
     DWORD bytesRead;
-    char inc_msg[1]; 
-    std::string complete_msg_inc; 
     unsigned int toread = 0;
 
     ClearCommError(handle_com, &err, &status);
-
-    if (status.cbInQue > 0) toread = size;
-    else toread = status.cbInQue;
-
-    if (ReadFile(handle_com, buffer, toread, &bytesRead, NULL)) 
+        
+    if (status.cbInQue > 0) 
     {
-        if()
+        if (status.cbInQue > size) toread = size;
+
+
+        else toread = status.cbInQue;
     }
 
-    return 0;
+    if (ReadFile(handle_com, buffer, toread, &bytesRead, nullptr)) 
+    {
+        return bytesRead;
+    }
 
+
+           
+        
+        
+    return 0;
 }
 
 
@@ -106,6 +117,82 @@ bool Serial_port::Write_Serial(char * buffer,unsigned int size)
 
 }
  
+void Serial_port::CustomSyntax(const std::string& syntax_type)
+{
+    std::ifstream syntaxfile_exist("syntax_config.txt");
+
+    if (!syntaxfile_exist)
+    {
+        std::ofstream syntaxfile;
+        syntaxfile.open("syntax_config.txt");
+
+        if (syntaxfile)
+        {
+            syntaxfile << "json { }\n";
+            syntaxfile << "greater_less_than < >\n";
+            syntaxfile.close();
+        }
+    }
+
+    syntaxfile_exist.close();
+
+    std::ifstream syntaxfile_in;
+    syntaxfile_in.open("syntax_config.txt");
+
+    std::string line;
+    bool found = false;
+
+    if (syntaxfile_in.is_open())
+    {
+        while (syntaxfile_in)
+        {
+            syntaxfile_in >> syntax_name_ >> front_delimiter_ >> end_delimiter_;
+            getline(syntaxfile_in, line);
+
+            if (syntax_name_ == syntax_type)
+            {
+                found = true;
+                break;
+            }
+        }
+
+        syntaxfile_in.close();
+
+        if (!found)
+        {
+            syntax_name_ = "";
+            front_delimiter_ = ' ';
+            end_delimiter_ = ' ';
+            std::cout << "Warning: Could not find delimiters, may cause problems!\n";
+        }
+    }
+    else
+    {
+        std::cout << "Warning: No file open\n";
+    }
+}
 
 
+bool Serial_port::check_com_format(char* com)
+{
+    //Format COMX or COMXX 
+    std::string comStr(com); 
+    if (comStr.length() > 5 || comStr.length() < 3) return false; 
+
+    return true;
+
+}
+ char* Serial_port::handle_higher_com(char* com) 
+{
+    std::string comStr(com); 
+    const char* prefix = "\\\\.\\";
+    if (comStr.length() == 5)
+    {
+        strcat_s(com, sizeof(com), prefix);
+      
+        return com; 
+
+    }
+    else return com; 
+}   
 bool Serial_port::isConnected() { return connected; }
