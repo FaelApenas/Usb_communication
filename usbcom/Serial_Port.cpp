@@ -8,7 +8,6 @@ Serial_port::Serial_port(char* com, DWORD baud_rate )
         printf("Com format not available ");
         return;
     } 
-    //com = handle_higher_com(com); not implemented
     err = 0;
     status = { 0 };
     connected = 0;

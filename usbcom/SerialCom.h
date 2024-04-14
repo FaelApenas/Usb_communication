@@ -12,6 +12,8 @@
 #define Wait_time 1000
 #define bytes_size 21
 
+
+
 class Serial_port
 {
 private:
@@ -32,7 +34,7 @@ public:
 	void CustomSyntax(const std::string& syntax_type); 
 	bool isConnected();
 	bool check_com_format(char* com);
-	 char* handle_higher_com(char* com);
+	char* handle_higher_com(char* com);
 
 
 };
